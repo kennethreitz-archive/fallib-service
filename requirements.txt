@@ -1,0 +1,13 @@
+Flask==0.10.1
+Flask-Script==0.6.2
+Jinja2==2.7.1
+MarkupSafe==0.18
+Werkzeug==0.9.4
+boto==2.13.3
+distribute==0.6.34
+dynamodb-mapper==1.8.1
+gunicorn==18.0
+itsdangerous==0.23
+onctuous==0.5.84
+requests==2.0.0
+wsgiref==0.1.2
