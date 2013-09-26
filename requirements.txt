@@ -1,6 +1,7 @@
 Flask==0.10.1
 Flask-Script==0.6.2
 Jinja2==2.7.1
+Markdown==2.3.1
 MarkupSafe==0.18
 Werkzeug==0.9.4
 boto==2.13.3
