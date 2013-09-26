@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask
+from flask import Flask, abort, jsonify, g
 from dynamodb_mapper.model import DynamoDBModel, ConnectionBorg
 
 from .models import User, Document, Content
@@ -12,17 +12,27 @@ def hello():
     return 'Hello World!'
 
 
-@app.before_request
-def before_request():
-    """Opens the connection to DynamoDB."""
-    g.dynamo_conn = ConnectionBorg()
+# @app.before_request
+# def before_request():
+#     """Opens the connection to DynamoDB."""
+#     g.dynamo_conn = ConnectionBorg()
 
-@app.teardown_request
-def teardown_request(exception):
-    """Closes the connection to DynamoDB."""
-    db = getattr(g, 'dynamo_conn', None)
-    if db is not None:
-        db.close()
+@app.route('/<path:slug>')
+def get_document(slug):
+    doc = Document.get(slug)
+
+    document = {
+        'slug': doc.slug,
+        'owner': doc.owner,
+        'text': doc.text,
+        'content': doc.content,
+        'history': doc.revisions,
+    }
+
+    return jsonify(document=document)
+
+
+getattr
 
 
 if __name__ == '__main__':

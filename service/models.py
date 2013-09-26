@@ -18,6 +18,10 @@ class User(DynamoDBModel):
         self.email = email
         self.set_password(password)
 
+        # profile = Document()
+        # profile.slug = self.username
+        # profile.
+
     def __repr__(self):
         return '<User %r>' % self.username
 
