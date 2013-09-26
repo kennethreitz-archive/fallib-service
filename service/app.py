@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, abort, jsonify, g
+from flask import Flask, abort, jsonify, request, redirect, url_for, g
 from dynamodb_mapper.model import DynamoDBModel, ConnectionBorg
 
 from .models import User, Document, Content, NotFound
@@ -72,6 +72,17 @@ def get_content_html(hash):
 
     doc = get_or_404(Content, hash)
     return doc.html
+
+@app.route('/content', methods=['POST', 'PUT'])
+def add_content():
+
+    assert 'text' in request.form
+
+    text = request.form['text']
+    content = Content.store(text)
+
+    return redirect(url_for('get_content', hash=content.hash))
+
 
 if __name__ == '__main__':
     app.run()
