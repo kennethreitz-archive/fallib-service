@@ -51,7 +51,7 @@ class Document(DynamoDBModel):
 
     @property
     def html(self):
-        return render(self.text)
+        return Content.get(self.content).html
 
     @property
     def owner(self):
@@ -97,6 +97,10 @@ class Content(DynamoDBModel):
         u'hash': unicode,
         u'text': unicode,
     }
+
+    @property
+    def html(self):
+        return render(self.text)
 
     @classmethod
     def store(cls, text):
