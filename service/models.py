@@ -8,7 +8,7 @@ class Users(DynamoDBModel):
     __hash_key__ = u'username'
     __schema__ = {
         u'username': unicode,
-        u'password': unicode,
+        u'password': str,
         u'email': unicode
     }
 
@@ -52,7 +52,7 @@ class Documents(DynamoDBModel):
     def __append_history(self, hash):
 
         doc = __get_history_doc()
-        doc = ','join([doc, hash]
+        doc = ','.join([doc, hash])
 
         history = Content.store(doc)
         self.history = history.hash
@@ -69,8 +69,8 @@ class Content(DynamoDBModel):
     __table__ = u'fallib-content'
     __hash_key__ = u'hash'
     __schema__ = {
-        u'hash': str,
-        u'text': str,
+        u'hash': unicode,
+        u'text': unicode,
     }
 
     @classmethod
