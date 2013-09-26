@@ -3,7 +3,7 @@
 from flask import Flask
 from dynamodb_mapper.model import DynamoDBModel, ConnectionBorg
 
-from .models import Users, Documents, Content
+from .models import User, Document, Content
 
 app = Flask(__name__)
 
