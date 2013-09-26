@@ -34,8 +34,20 @@ class Document(DynamoDBModel):
         u'slug': unicode,
         u'content': unicode,
         u'archived': bool,
-        u'history': unicode,
+        u'history': unicode
     }
+    __defaults__ = {
+        u'archived': False,
+        u'history': u'da39a3ee5e6b4b0d3255bfef95601890afd80709'
+    }
+
+    @property
+    def text(self):
+        return Content.get(self.content).text
+
+    @property
+    def html(self):
+        return render(self.text)
 
     @property
     def owner(self):
@@ -44,7 +56,6 @@ class Document(DynamoDBModel):
             return User.get(guess).username
         except NotFound:
             return None
-
 
     def commit_content_hash(self, hash):
         self.content = hash
