@@ -3,7 +3,7 @@
 from flask import Flask, abort, jsonify, g
 from dynamodb_mapper.model import DynamoDBModel, ConnectionBorg
 
-from .models import User, Document, Content
+from .models import User, Document, Content, NotFound
 
 app = Flask(__name__)
 
@@ -11,15 +11,18 @@ app = Flask(__name__)
 def hello():
     return 'Hello World!'
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return jsonify(error={'status': 'Not found.', 'code': '404'}), 404
 
-# @app.before_request
-# def before_request():
-#     """Opens the connection to DynamoDB."""
-#     g.dynamo_conn = ConnectionBorg()
 
 @app.route('/<path:slug>')
 def get_document(slug):
-    doc = Document.get(slug)
+
+    try:
+        doc = Document.get(slug)
+    except NotFound:
+        abort(404)
 
     document = {
         'slug': doc.slug,
@@ -30,9 +33,6 @@ def get_document(slug):
     }
 
     return jsonify(document=document)
-
-
-getattr
 
 
 if __name__ == '__main__':
