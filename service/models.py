@@ -2,7 +2,7 @@ import requests
 from dynamodb_mapper.model import DynamoDBModel
 from werkzeug.security import generate_password_hash, check_password_hash
 from boto.dynamodb.exceptions import DynamoDBKeyNotFoundError as NotFound
-from .utils import render, hash
+from .utils import render, hash, extract_links
 
 MARKDOWN_URL='http://url2markdown.herokuapp.com/'
 
@@ -73,6 +73,9 @@ class Document(DynamoDBModel):
         content = Content.store(text)
         self.commit_content_hash(content.hash)
 
+        URL.store_from_text(text)
+        self.save()
+
     @property
     def revisions(self):
         doc = self.__get_history_doc()
@@ -91,6 +94,7 @@ class Document(DynamoDBModel):
             return Content.get(self.history).text
         except (NotFound, TypeError):
             return u'da39a3ee5e6b4b0d3255bfef95601890afd80709'
+
 
 
 class Content(DynamoDBModel):
@@ -136,6 +140,18 @@ class URL(DynamoDBModel):
 
         return new_url
 
+    @classmethod
+    def store_from_text(cls, text):
+        for link in extract_links(text):
+            cls.store(link)
+
     @property
     def text(self):
         return Content.get(self.content).text
+
+    @classmethod
+    def get_or_store(cls, url):
+        try:
+            return cls.get(url)
+        except NotFound:
+            return cls.store(url)

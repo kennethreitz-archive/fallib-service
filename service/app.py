@@ -3,9 +3,10 @@
 from flask import Flask, abort, jsonify, request, redirect, url_for, g
 from dynamodb_mapper.model import DynamoDBModel, ConnectionBorg
 
-from .models import User, Document, Content, NotFound
+from .models import User, Document, Content, URL, NotFound
 
 app = Flask(__name__)
+app.debug = True
 
 def get_or_404(cls, key):
     try:
@@ -82,6 +83,34 @@ def add_content():
     content = Content.store(text)
 
     return redirect(url_for('get_content', hash=content.hash))
+
+
+@app.route('/archive')
+def archive():
+
+    q = request.args.get('q')
+    text = 'text' in request.args
+
+    if not q:
+        abort(404)
+
+    url = URL.get_or_store(q)
+
+    if text:
+        return url.text
+
+    document = {
+        'url': url.url,
+        'text': url.text,
+    }
+
+    return jsonify(url=document)
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
