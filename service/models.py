@@ -46,7 +46,8 @@ class Document(DynamoDBModel):
     }
     __defaults__ = {
         u'archived': False,
-        u'history': u'da39a3ee5e6b4b0d3255bfef95601890afd80709'
+        u'history': u'da39a3ee5e6b4b0d3255bfef95601890afd80709',
+        u'links': set()
     }
 
     @property
@@ -75,8 +76,10 @@ class Document(DynamoDBModel):
         self.commit_content_hash(content.hash)
 
         links = URL.store_from_text(text)
-        self.links = set()
-        self.links.update(links)
+        if links:
+            self.links = set()
+            self.links.update(links)
+
         self.save()
 
     @property
@@ -86,8 +89,10 @@ class Document(DynamoDBModel):
 
     def __append_history(self, hash):
 
-        if self.revisions.pop() != hash:
-            doc = ','.join(self.revisions + [hash])
+        revisions = [r for r in revisions if len(r)>2]
+
+        if self.revisions[-1] != hash:
+            doc = ','.join(revisions + [hash])
 
             history = Content.store(doc)
             self.history = history.hash
