@@ -61,9 +61,6 @@ def hello():
     }
     return jsonify(resources=payload)
 
-@app.errorhandler(201)
-def error_201(e):
-    return jsonify(error={'status': 'IT IS DONE.', 'code': '201'}), 201
 
 @app.errorhandler(404)
 def error_404(e):
@@ -213,7 +210,7 @@ def signup():
         raise e
 
     user = User.create(username, password)
-    abort(201)
+    return jsonify(error={'status': 'IT IS DONE.', 'code': '201'}), 201
 
 
 
