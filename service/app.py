@@ -177,7 +177,7 @@ def archive():
     url = URL.get_or_store(q)
 
     if text:
-        return url.text
+        return url.text, 200, {'Content-Type': 'text/x-markdown; charset=UTF-8'}
 
     document = {
         'url': url.url,
