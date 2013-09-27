@@ -34,6 +34,7 @@ def get_document(slug):
         'text': doc.text,
         'content': doc.content,
         'history': doc.revisions,
+        'links': list(doc.links)
     }
 
     return jsonify(document=document)

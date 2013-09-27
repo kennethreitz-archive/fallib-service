@@ -41,7 +41,8 @@ class Document(DynamoDBModel):
         u'slug': unicode,
         u'content': unicode,
         u'archived': bool,
-        u'history': unicode
+        u'history': unicode,
+        u'links': set,
     }
     __defaults__ = {
         u'archived': False,
@@ -73,7 +74,9 @@ class Document(DynamoDBModel):
         content = Content.store(text)
         self.commit_content_hash(content.hash)
 
-        URL.store_from_text(text)
+        links = URL.store_from_text(text)
+        self.links = set()
+        self.links.update(links)
         self.save()
 
     @property
@@ -142,8 +145,13 @@ class URL(DynamoDBModel):
 
     @classmethod
     def store_from_text(cls, text):
-        for link in extract_links(text):
+        links = extract_links(text)
+
+        for link in links:
             cls.store(link)
+
+        return links
+
 
     @property
     def text(self):
