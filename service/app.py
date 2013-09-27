@@ -17,12 +17,14 @@ def get_or_404(cls, key):
 @app.route('/')
 def hello():
     payload = {
-        '/:user': 'A JSON representation of a users representation of themselves.',
+        '/:user': 'JSON representation of a user\'s representation of themself.',
         '/:user/:document': 'JSON representation of a document.',
         '/:user/:document/text': 'Markdown representation of a document.',
         '/:user/:document/html': 'HTML representation of a document.',
-        '/archive?q=:url': 'Get or archive content from a URL.',
-        '/content/:sha': 'Retrieve any document by its SHA1.',
+        '/archive?q=:url': 'Permanent archive of given URL.',
+        '/content/:sha': 'Permanent JSON archive of a given content.',
+        '/content/:sha/text': 'Markdown representation of a given content.',
+        '/content/:sha/html': 'Permanent HTML representation of a given content.',
     }
     return jsonify(resources=payload)
 
