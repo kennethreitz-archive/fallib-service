@@ -61,6 +61,10 @@ def hello():
     }
     return jsonify(resources=payload)
 
+@app.errorhandler(201)
+def error_201(e):
+    return jsonify(error={'status': 'IT IS DONE.', 'code': '201'}), 201
+
 @app.errorhandler(404)
 def error_404(e):
     return jsonify(error={'status': 'WHAT IS THIS!?', 'code': '404'}), 404
@@ -186,6 +190,31 @@ def archive():
     }
 
     return jsonify(url=document)
+
+
+
+@app.route('/signup')
+def signup():
+
+    username = request.form['username']
+    password = request.form['password']
+
+    try:
+        user = User.get(username)
+    except NotFound:
+        user = None
+
+    if user:
+        abort(403)
+
+    try:
+        assert username.isalpha()
+    except AssertionError, e:
+        raise e
+
+    user = User.create(username, password)
+    abort(201)
+
 
 
 if __name__ == '__main__':

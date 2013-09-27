@@ -12,18 +12,12 @@ class User(DynamoDBModel):
     __schema__ = {
         u'username': unicode,
         u'password': unicode,
-        u'email': unicode
     }
 
     @classmethod
-    def create(cls, username, email, password):
+    def create(cls, username, password):
         self.username = username
-        self.email = email
         self.set_password(password)
-
-        # profile = Document()
-        # profile.slug = self.username
-        # profile.
 
     def __repr__(self):
         return '<User %r>' % self.username
