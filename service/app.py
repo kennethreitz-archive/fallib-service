@@ -193,7 +193,7 @@ def archive():
 
 
 
-@app.route('/signup')
+@app.route('/signup', methods=['PUT', 'POST'])
 def signup():
 
     username = request.form['username']
