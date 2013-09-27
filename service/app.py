@@ -16,7 +16,15 @@ def get_or_404(cls, key):
 
 @app.route('/')
 def hello():
-    return 'Hello World!'
+    payload = {
+        '/:user': 'A JSON representation of a users representation of themselves.',
+        '/:user/:document': 'JSON representation of a document.',
+        '/:user/:document/text': 'Markdown representation of a document.',
+        '/:user/:document/html': 'HTML representation of a document.',
+        '/archive?q=:url': 'Get or archive content from a URL.',
+        '/content/:sha': 'Retrieve any document by its SHA1.',
+    }
+    return jsonify(resources=payload)
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -107,12 +115,6 @@ def archive():
     }
 
     return jsonify(url=document)
-
-
-
-
-
-
 
 
 if __name__ == '__main__':
