@@ -16,6 +16,7 @@ class User(DynamoDBModel):
 
     @classmethod
     def create(cls, username, password):
+        self = cls()
         self.username = username
         self.set_password(password)
 
