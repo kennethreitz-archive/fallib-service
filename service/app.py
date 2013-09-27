@@ -122,7 +122,7 @@ def post_document(slug):
 def get_document_text(slug):
 
     doc = get_or_404(Document, slug)
-    return doc.text
+    return doc.text, 200, {'Content-Type': 'text/x-markdown; charset=UTF-8'}
 
 @app.route('/<path:slug>/html')
 def get_document_html(slug):
@@ -146,7 +146,7 @@ def get_content(hash):
 def get_content_text(hash):
 
     doc = get_or_404(Content, hash)
-    return doc.text
+    return doc.text, 200, {'Content-Type': 'text/x-markdown; charset=UTF-8'}
 
 @app.route('/content/<hash>/html')
 def get_content_html(hash):
