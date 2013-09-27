@@ -5,6 +5,7 @@ from boto.dynamodb.exceptions import DynamoDBKeyNotFoundError as NotFound
 from .utils import render, hash, extract_links
 
 MARKDOWN_URL='http://url2markdown.herokuapp.com/'
+requests = requests.session()
 
 class User(DynamoDBModel):
     __table__ = u'fallib-users'
