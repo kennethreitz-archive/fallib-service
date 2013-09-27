@@ -103,6 +103,7 @@ def archive():
     document = {
         'url': url.url,
         'text': url.text,
+        'content': url.content
     }
 
     return jsonify(url=document)
