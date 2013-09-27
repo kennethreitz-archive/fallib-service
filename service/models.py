@@ -19,6 +19,7 @@ class User(DynamoDBModel):
         self = cls()
         self.username = username
         self.set_password(password)
+        self.save()
 
     def __repr__(self):
         return '<User %r>' % self.username
