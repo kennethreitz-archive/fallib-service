@@ -1,7 +1,10 @@
+import requests
 from dynamodb_mapper.model import DynamoDBModel
 from werkzeug.security import generate_password_hash, check_password_hash
 from boto.dynamodb.exceptions import DynamoDBKeyNotFoundError as NotFound
 from .utils import render, hash
+
+MARKDOWN_URL='http://url2markdown.herokuapp.com/'
 
 class User(DynamoDBModel):
     __table__ = u'fallib-users'
@@ -110,3 +113,29 @@ class Content(DynamoDBModel):
         content.save()
 
         return content
+
+class URL(DynamoDBModel):
+    __table__ = u'fallib-urls'
+    __hash_key__ = u'url'
+    __schema__ = {
+        u'url': unicode,
+        u'content': unicode,
+    }
+
+    @classmethod
+    def store(cls, url):
+        params = {'url': url}
+        text = requests.get(MARKDOWN_URL, params=params).text
+
+        content = Content.store(text)
+
+        new_url = cls()
+        new_url.url = url
+        new_url.content = content.hash
+        new_url.save()
+
+        return new_url
+
+    @property
+    def text(self):
+        return Content.get(self.content).text
