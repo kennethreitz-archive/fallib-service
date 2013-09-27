@@ -89,7 +89,7 @@ class Document(DynamoDBModel):
 
     def __append_history(self, hash):
 
-        revisions = [r for r in revisions if len(r)>2]
+        revisions = [r for r in self.revisions if len(r)>2]
 
         if self.revisions[-1] != hash:
             doc = ','.join(revisions + [hash])
