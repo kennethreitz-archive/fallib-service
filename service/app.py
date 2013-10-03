@@ -171,12 +171,15 @@ def archive():
 
     q = request.args.get('q')
     text = 'text' in request.args
+    html = 'html' in request.args
 
     if not q:
         abort(404)
 
     url = URL.get_or_store(q)
 
+    if html:
+        return url.html
     if text:
         return url.text, 200, {'Content-Type': 'text/x-markdown; charset=UTF-8'}
 
