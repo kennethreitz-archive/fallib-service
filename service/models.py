@@ -159,6 +159,10 @@ class URL(DynamoDBModel):
     def text(self):
         return Content.get(self.content).text
 
+    @property
+    def html(self):
+        return Content.get(self.content).html
+
     @classmethod
     def get_or_store(cls, url):
         try:
